@@ -1,6 +1,7 @@
 import './bootstrap';
 import '../css/app.css';
 
+import { ChakraProvider } from '@chakra-ui/react';
 import { createRoot } from 'react-dom/client';
 import { createInertiaApp } from '@inertiajs/react';
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
@@ -13,7 +14,11 @@ createInertiaApp({
     setup({ el, App, props }) {
         const root = createRoot(el);
 
-        root.render(<App {...props} />);
+        root.render(
+            <ChakraProvider>
+                <App {...props} />
+            </ChakraProvider>
+        );
     },
     progress: {
         color: '#4B5563',
