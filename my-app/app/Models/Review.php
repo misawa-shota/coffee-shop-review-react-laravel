@@ -27,4 +27,15 @@ class Review extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function saveReview($request)
+    {
+        $this->shop_id = $request->shop_id;
+        $this->user_id = 1; //テスト用
+        $this->rating = $request->rating;
+        $this->comment = $request->comment;
+        $this->save();
+
+        return $this;
+    }
 }
