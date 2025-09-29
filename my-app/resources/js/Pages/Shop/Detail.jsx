@@ -1,9 +1,24 @@
+import React,{ useEffect } from "react";
 import MainLayout from "@/Layouts/MainLayout";
-import { StarIcon } from "@chakra-ui/icons";
-import { Box, Heading, HStack, Image, Text } from "@chakra-ui/react";
+import { Box, Button, Heading, Image, Text, Link, useToast } from "@chakra-ui/react";
 import ReviewList from "@/Components/Organisms/ReviewList";
+import { SmallAddIcon } from "@chakra-ui/icons";
 
 const Detail = (props) => {
+    const toast = useToast();
+
+    useEffect(() => {
+        if (props.status === "review-create") {
+            toast({
+                position: "top",
+                title: 'レビュー投稿成功',
+                description: "レビューの投稿が完了しました。",
+                status: "success",
+                duration: 9000,
+                isClosable: true,
+            });
+        }
+    }, [props.status])
     return (
         <Box p={4}>
             <Heading as="h2" size={"xl"} mb={4}>
@@ -23,6 +38,11 @@ const Detail = (props) => {
             <Heading as="h3" size={"lg"} mb={4}>
                 レビュー
             </Heading>
+            <Box>
+                <Link href={`/review/create/shop/${props.shop.id}`}>
+                    <Button my={4}><SmallAddIcon/>レビューを書く</Button>
+                </Link>
+            </Box>
             <Box>
                 {props.reviews.length > 0 && <Box mb={2}>({props.reviews.length})</Box>}
             </Box>
