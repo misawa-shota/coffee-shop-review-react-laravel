@@ -34,7 +34,7 @@ const MainLayout = ({ children }) => {
                                     <Text fontSize={"xs"} mb={4}>{auth.user.name}さん</Text>
                                     <VStack>
                                         <Link href={route('dashboard')} _hover={{color: "gray.500"}}>マイページ</Link>
-                                        <Link href="#" _hover={{color: "gray.500"}}>店舗の登録</Link>
+                                        <Link href={route("shop.create")} _hover={{color: "gray.500"}}>店舗の登録</Link>
                                         <InertiaLink href={route('logout')} method="post" _hover={{color: "gray.500"}}>ログアウト</InertiaLink>
                                     </VStack>
                                 </Box>

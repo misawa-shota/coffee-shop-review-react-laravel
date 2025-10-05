@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\User;
+use App\Models\ShopImage;
 
 class Shop extends Model
 {
@@ -13,11 +15,35 @@ class Shop extends Model
         'name',
         'location',
         'description',
+        'created_by',
+        'updated_by',
     ];
 
     // reviewsテーブルとのリレーション
     public function reviews()
     {
         return $this->hasMany(Review::class);
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function shopImages()
+    {
+        return $this->hasMany(ShopImage::class);
+    }
+
+    public function saveShop($data)
+    {
+        $this->name = $data['name'];
+        $this->location = $data['location'];
+        $this->description = $data['description'];
+        $this->created_by = $data['created_by'];
+        $this->updated_by = $data['updated_by'];
+        $this->save();
+
+        return $this;
     }
 }

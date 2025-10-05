@@ -24,13 +24,26 @@ const Detail = (props) => {
             <Heading as="h2" size={"xl"} mb={4}>
                 {props.shop.name}
             </Heading>
-            <Image
-                boxSize="300px"
-                objectfit="contain"
-                src="https://placehold.jp/300x300.png"
-                alt={props.shop.name}
-                mb={4}
-            />
+            {props.shop.shop_images ? (
+                props.shop.shop_images.map((image) => (
+                    <Image
+                        key={image.id}
+                        boxSize="300px"
+                        objectfit="contain"
+                        src={import.meta.env.VITE_APP_URL + "/" + image.file_path}
+                        alt={image.file_name}
+                        mb={4}
+                    />
+                ))
+            ) : (
+                <Image
+                    boxSize="300px"
+                    objectfit="contain"
+                    src="https://placehold.jp/300x300.png"
+                    alt={props.shop.name}
+                    mb={4}
+                />
+            )}
             <Text mb={2}>{props.shop.description}</Text>
             <Text mb={2}>{props.shop.location}</Text>
 

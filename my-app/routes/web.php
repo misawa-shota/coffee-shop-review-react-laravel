@@ -42,7 +42,14 @@ Route::get('/sample', function () {
 })->name('sample');
 Route::get('/', [ShopController::class, 'index'])->name('shop.index');
 
+// Shop
+Route::middleware('auth')->group(function () {
+    Route::get('/shop/create', [ShopController::class, 'create'])->name('shop.create');
+    Route::post('/shop/store', [ShopController::class, 'store'])->name('shop.store');
+});
 Route::get('/shop/{id}',[ShopController::class, 'detail'])->name('shop.detail');
+
+
 
 // Review
 Route::middleware('auth')->group(function () {
