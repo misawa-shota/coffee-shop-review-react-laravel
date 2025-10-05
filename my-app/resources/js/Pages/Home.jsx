@@ -1,9 +1,22 @@
-import react from "react";
-import { Box, Heading, VStack, HStack, Image, Text, Link } from "@chakra-ui/react";
+import React, {useEffect} from "react";
+import { Box, Heading, VStack, HStack, Image, Text, Link, useToast } from "@chakra-ui/react";
 import MainLayout from "@/Layouts/MainLayout";
 import ReviewList from "@/Components/Organisms/ReviewList";
 
 const Home = (props) => {
+    const toast = useToast();
+    useEffect(() => {
+        if(props.status === "shop_created"){
+            toast({
+                position: "top",
+                title: "店舗登録成功",
+                description: "店舗の登録が完了しました。",
+                status: "success",
+                duration: 9000,
+                isClosable: true,
+            });
+        }
+    }, [props.status])
     return (
         <>
             <Box p={4}>
