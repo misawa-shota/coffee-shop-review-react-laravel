@@ -1,10 +1,9 @@
 import React from 'react';
 import MainLayout from '@/Layouts/MainLayout';
 import { Box, Button, FormControl, FormLabel, Heading, Input, Textarea, Image, useToast } from '@chakra-ui/react';
-import { useForm, router, usePage } from '@inertiajs/react';
+import { useForm, router } from '@inertiajs/react';
 
 const Create = () => {
-    // const { auth, csrf_token } = usePage().props;
     const { data, setData, post, errors } = useForm({
         name: "",
         location: "",
