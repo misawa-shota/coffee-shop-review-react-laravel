@@ -28,14 +28,25 @@ class Review extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function saveReview($request)
+    public function saveReview($data)
     {
-        $this->shop_id = $request->shop_id;
-        $this->user_id = 1; //テスト用
-        $this->rating = $request->rating;
-        $this->comment = $request->comment;
+        $this->shop_id = $data['shop_id'];
+        $this->user_id = $data['user_id'];
+        $this->rating = $data['rating'];
+        $this->comment = $data['comment'];
         $this->save();
 
         return $this;
+    }
+
+    public function updateReview($request)
+    {
+        // レビューIDからレビューを取得
+        $review = $this->find($request->review_id);
+        $review->rating = $request->rating;
+        $review->comment = $request->comment;
+        $review->save();
+
+        return $review;
     }
 }
