@@ -47,7 +47,7 @@ const Create = (props) => {
                     <AlertDialogOverlay>
                         <AlertDialogContent>
                             <AlertDialogHeader>
-                                最終確認
+                                投稿確認
                             </AlertDialogHeader>
                             <AlertDialogBody>
                                 この内容で投稿しますか？

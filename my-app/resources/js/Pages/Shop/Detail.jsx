@@ -17,6 +17,24 @@ const Detail = (props) => {
                 duration: 9000,
                 isClosable: true,
             });
+        } else if (props.status === "review_updated") {
+            toast({
+                position: "top",
+                title: 'レビュー更新成功',
+                description: "レビューの更新が完了しました。",
+                status: "info",
+                duration: 9000,
+                isClosable: true,
+            });
+        } else if (props.status === "review_deleted") {
+            toast({
+                position: "top",
+                title: 'レビュー削除成功',
+                description: "レビューの削除が完了しました。",
+                status: "error",
+                duration: 9000,
+                isClosable: true,
+            });
         }
     }, [props.status])
     return (
