@@ -129,4 +129,133 @@ class ShopController extends Controller
             'status' => $status,
         ]);
     }
+
+    public function edit($id)
+    {
+        $shop = Shop::with('shopImages')->find($id);
+        return Inertia::render('Shop/Edit',[
+            'shop' => $shop,
+        ]);
+    }
+
+    public function update(Request $request)
+    {
+        $status = "error";
+
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'location' => 'required|string',
+            'description' => 'required|string',
+        ]);
+
+        // トランザクションを開始
+        DB::beginTransaction();
+        try {
+
+            $shopModel = new Shop();
+            $shop = $shopModel->updateShop([
+                'id' => $request->id,
+                'name' => $request->name,
+                'location' => $request->location,
+                'description' => $request->description,
+                'updated_by' => Auth::id(),
+            ]);
+
+            // 既存の画像の削除
+            if($request->existingImages){
+                $existingImages = $request->existingImages;
+                // 更新する店舗の元の画像のIDのみを取得
+                $existingImageIds = array_column($existingImages, 'id');
+
+                // テーブルに保存されている画像のIDを取得
+                $arrayShopImageIds = DB::table('shop_images')->where('shop_id', $shop->id)->get(['id'])->toArray();
+                $shopImageIds = array_column($arrayShopImageIds, 'id');
+
+                // IDを比較する
+                $deleteImageIds = array_diff($shopImageIds, $existingImageIds);
+
+                if($deleteImageIds > 0){
+                    // 削除する画像のIDを指定して削除
+                    DB::table('shop_images')->whereIn('id', $deleteImageIds)->delete();
+                }
+            }
+
+            // 新規画像の保存
+            if($request->file('images')){
+                $images = $request->file('images');
+                foreach($images as $image){
+                    // 画像の拡張子を取得
+                    $extension = $image->getClientOriginalExtension();
+                    // 乱数を作成
+                    $random = Random::generate(16);
+                    // 画像の名前を生成
+                    $fileName = $shop->id . '_' . $random . '.' . $extension;
+                    $shopImageModel = new ShopImage();
+                    $shopImageModel->saveImage([
+                        'shop_id' => $shop->id,
+                        'file_name' => $fileName,
+                        'file_path' => 'storage/shop_images/' . $fileName,
+                        'file_type' => $image->getClientMimeType(),
+                        'file_size' => $image->getSize(),
+                        'file_extension' => $extension,
+                        'file_mime' => $image->getClientMimeType(),
+                        'file_original_name' => $image->getClientOriginalName(),
+                        'file_original_path' => $image->getPathname(),
+                    ]);
+
+                    // 画像の保存
+                    $image->storeAs('public/shop_images', $fileName);
+                }
+            }
+            // コミット
+            DB::commit();
+
+            $status = 'shop_updated';
+        } catch(\Exception $e){
+            $message = $e->getMessage();
+            Log::error($message);
+            DB::rollBack();
+            throw $e;
+        }
+
+        return redirect()->route('shop.detail', [
+            'id' => $shop->id,
+            'status' => $status,
+        ]);
+    }
+
+    public function destroy($id)
+    {
+        $status = "error";
+
+        $shop = Shop::find($id);
+
+        DB::beginTransaction();
+        try{
+            // 店舗画像の削除
+            // 店舗画像のIDのみ取得
+            $shopImageIds = ShopImage::where('shop_id', $id)->get(['id']);
+            if($shopImageIds->count() > 0){
+                $shopImageIds = $shopImageIds->toArray();
+                $shopImageIds = array_column($shopImageIds, 'id');
+                DB::table('shop_images')->whereIn('id', $shopImageIds)->delete();
+            }
+
+            // 店舗の削除
+            $shop->delete();
+
+            // コミット
+            DB::commit();
+            $status = 'shop_deleted';
+        }catch(\Exception $e){
+            $message = $e->getMessage();
+            Log::error($message);
+            DB::rollBack();
+            throw $e;
+        }
+
+        return redirect()->route('shop.index', [
+            'status' => $status,
+        ]);
+    }
 }

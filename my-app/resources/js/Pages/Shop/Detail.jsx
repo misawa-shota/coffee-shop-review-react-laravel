@@ -1,8 +1,8 @@
 import React,{ useEffect } from "react";
 import MainLayout from "@/Layouts/MainLayout";
-import { Box, Button, Heading, Image, Text, Link, useToast } from "@chakra-ui/react";
+import { Box, Button, Heading, Image, Text, Link, useToast, HStack } from "@chakra-ui/react";
 import ReviewList from "@/Components/Organisms/ReviewList";
-import { SmallAddIcon } from "@chakra-ui/icons";
+import { EditIcon, SmallAddIcon } from "@chakra-ui/icons";
 
 const Detail = (props) => {
     const toast = useToast();
@@ -35,13 +35,29 @@ const Detail = (props) => {
                 duration: 9000,
                 isClosable: true,
             });
+        } else if (props.status === "shop_updated") {
+            toast({
+                position: "top",
+                title: '店舗の更新成功',
+                description: "店舗の更新が完了しました。",
+                status: "info",
+                duration: 9000,
+                isClosable: true,
+            });
         }
     }, [props.status])
     return (
         <Box p={4}>
-            <Heading as="h2" size={"xl"} mb={4}>
-                {props.shop.name}
-            </Heading>
+            <HStack spacing={4}>
+                <Heading as="h2" size={"xl"} mb={4}>
+                    {props.shop.name}
+                </Heading>
+                <Link href={route('shop.edit', {id: props.shop.id})}>
+                    <Button p={2} borderRadius={10} bg={"gray.200"}>
+                        <EditIcon/>
+                    </Button>
+                </Link>
+            </HStack>
             {props.shop.shop_images ? (
                 props.shop.shop_images.map((image) => (
                     <Image

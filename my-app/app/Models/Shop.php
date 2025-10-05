@@ -46,4 +46,17 @@ class Shop extends Model
 
         return $this;
     }
+
+    public function updateShop($data)
+    {
+        // ショップIDからショップを取得
+        $shop = $this->find($data['id']);
+        $shop->name = $data['name'];
+        $shop->location = $data['location'];
+        $shop->description = $data['description'];
+        $shop->updated_by = $data['updated_by'];
+        $shop->save();
+
+        return $shop;
+    }
 }

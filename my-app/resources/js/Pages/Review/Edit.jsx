@@ -42,7 +42,6 @@ const Edit = (props) => {
         e.preventDefault();
         setLoading(true);
         e.target.disabled = true;
-        console.log(values);
         router.post(route('review.update'), values);
     };
 
@@ -103,32 +102,32 @@ const Edit = (props) => {
             </Box>
 
             {/* 削除確認ダイアログ */}
-                <>
-                    <AlertDialog
-                    isOpen={isDeleteOpen}
-                    leastDestructiveRef={cancelRef}
-                    onClose={onDeleteClose}
-                    >
-                        <AlertDialogOverlay>
-                            <AlertDialogContent>
-                                <AlertDialogHeader>
-                                    削除確認
-                                </AlertDialogHeader>
-                                <AlertDialogBody>
-                                    本当に削除しますか？
-                                </AlertDialogBody>
-                                <AlertDialogFooter>
-                                    <Button ref={cancelRef} onClick={onDeleteClose}>
-                                        キャンセル
-                                    </Button>
-                                    <Button colorScheme={"red"} ml={3} onClick={handleDelete}>
-                                        {loading ? <Spinner /> : "削除する"}
-                                    </Button>
-                                </AlertDialogFooter>
-                            </AlertDialogContent>
-                        </AlertDialogOverlay>
-                    </AlertDialog>
-                </>
+            <>
+                <AlertDialog
+                isOpen={isDeleteOpen}
+                leastDestructiveRef={cancelRef}
+                onClose={onDeleteClose}
+                >
+                    <AlertDialogOverlay>
+                        <AlertDialogContent>
+                            <AlertDialogHeader>
+                                削除確認
+                            </AlertDialogHeader>
+                            <AlertDialogBody>
+                                本当に削除しますか？
+                            </AlertDialogBody>
+                            <AlertDialogFooter>
+                                <Button ref={cancelRef} onClick={onDeleteClose}>
+                                    キャンセル
+                                </Button>
+                                <Button colorScheme={"red"} ml={3} onClick={handleDelete}>
+                                    {loading ? <Spinner /> : "削除する"}
+                                </Button>
+                            </AlertDialogFooter>
+                        </AlertDialogContent>
+                    </AlertDialogOverlay>
+                </AlertDialog>
+            </>
 
             <Box display={"flex"} justifyContent={"center"}>
                 <form onSubmit={handleDeleteCheck}>
