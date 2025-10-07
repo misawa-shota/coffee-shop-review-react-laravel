@@ -3,6 +3,8 @@ import MainLayout from "@/Layouts/MainLayout";
 import { Box, Button, Heading, Image, Text, Link, useToast, HStack } from "@chakra-ui/react";
 import ReviewList from "@/Components/Organisms/ReviewList";
 import { EditIcon, SmallAddIcon } from "@chakra-ui/icons";
+import { Splide, SplideSlide } from "@splidejs/react-splide";
+import '@splidejs/react-splide/css';
 
 const Detail = (props) => {
     const toast = useToast();
@@ -46,6 +48,16 @@ const Detail = (props) => {
             });
         }
     }, [props.status])
+
+    const options = {
+        type: "loop",
+        gap: "1rem",
+        autoplay: true,
+        pauseOnHover: false,
+        resetProgress: false,
+        height: "15rem",
+    };
+
     return (
         <Box p={4}>
             <HStack spacing={4}>
@@ -59,16 +71,25 @@ const Detail = (props) => {
                 </Link>
             </HStack>
             {props.shop.shop_images ? (
-                props.shop.shop_images.map((image) => (
-                    <Image
-                        key={image.id}
-                        boxSize="300px"
-                        objectfit="contain"
-                        src={import.meta.env.VITE_APP_URL + "/" + image.file_path}
-                        alt={image.file_name}
-                        mb={4}
-                    />
-                ))
+                <Box w={300}>
+                    <Splide
+                        options={options}
+                        aria-labelledby="autoplay-example-heading"
+                    >
+                        {props.shop.shop_images.map((image) => (
+                            <SplideSlide>
+                                <Image
+                                    key={image.id}
+                                    boxSize="300px"
+                                    objectfit="contain"
+                                    src={import.meta.env.VITE_APP_URL + "/" + image.file_path}
+                                    alt={image.file_name}
+                                    mb={4}
+                                />
+                            </SplideSlide>
+                        ))}
+                    </Splide>
+                </Box>
             ) : (
                 <Image
                     boxSize="300px"
