@@ -23,6 +23,7 @@
         "@chakra-ui/icons": "^2.2.4",
         "@chakra-ui/react": "^2.8.2",
         "@emotion/styled": "^11.14.1",
+        "@splidejs/react-splide": "^0.7.12",
         "framer-motion": "^12.23.19"
     }
 }
