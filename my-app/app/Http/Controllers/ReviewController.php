@@ -6,9 +6,23 @@ use Illuminate\Http\Request;
 use Inertia\Inertia;
 use App\Models\Review;
 use App\Models\Shop;
+use App\Models\User;
 
 class ReviewController extends Controller
 {
+    public function indexByUser($userId)
+    {
+        $user = User::find($userId);
+        $reviews = Review::with('shop', 'user')
+            ->where('user_id', $userId)
+            ->get();
+
+        return Inertia::render('Review/IndexByUser', [
+            'reviews' => $reviews,
+            'user' => $user,
+        ]);
+    }
+
     public function create($id)
     {
         $shop = Shop::find($id);

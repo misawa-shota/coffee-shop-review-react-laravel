@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Shop;
 use App\Models\ShopImage;
 use App\Models\Review;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\DB;
@@ -35,12 +36,30 @@ class ShopController extends Controller
         ]);
     }
 
+    public function indexByUser($userId)
+    {
+        $user = User::find($userId);
+        $shops = Shop::with("shopImages")
+            ->where('created_by', $userId)
+            ->orWhere('updated_by', $userId)
+            ->get();
+
+        return Inertia::render('Shop/IndexByUser', [
+            'shops' => $shops,
+            'user' => $user,
+        ]);
+    }
+
     public function detail($id)
     {
         $shop = Shop::with('shopImages')->find($id);
 
         // クエリパラメーターからステータスを取得
         $status = request('status');
+
+        // 作成者と更新者のユーザーデータの取得
+        $createdUser = User::find($shop->created_by);
+        $updatedUser = User::find($shop->updated_by);
 
         $reviews = Review::with('user')
             ->where('shop_id', $id)
@@ -49,6 +68,8 @@ class ShopController extends Controller
 
         return Inertia::render('Shop/Detail', [
             'shop' => $shop,
+            'createdUser' => $createdUser,
+            'updatedUser' => $updatedUser,
             'reviews' => $reviews,
             'status' => $status,
         ]);

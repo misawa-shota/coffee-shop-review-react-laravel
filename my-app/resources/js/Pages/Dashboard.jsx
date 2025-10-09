@@ -1,21 +1,26 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
-import { Head } from '@inertiajs/react';
+import { Box, Link, Button, Heading } from '@chakra-ui/react';
+import { Head, usePage } from '@inertiajs/react';
+import MainLayout from '@/Layouts/MainLayout';
 
-export default function Dashboard({ auth }) {
+export default function Dashboard() {
+    const {auth} = usePage().props;
+
     return (
-        <AuthenticatedLayout
-            user={auth.user}
-            header={<h2 className="font-semibold text-xl text-gray-800 leading-tight">Dashboard</h2>}
-        >
-            <Head title="Dashboard" />
-
-            <div className="py-12">
-                <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                    <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                        <div className="p-6 text-gray-900">You're logged in!</div>
-                    </div>
-                </div>
-            </div>
-        </AuthenticatedLayout>
+            <Box>
+                <Head title="Dashboard" />
+                <Heading>ダッシュボード</Heading>
+                <Box m={4}>
+                    <Link href={route("review.indexByUser", {userId: auth.user.id})}>
+                        <Button colorScheme={"blue"}>投稿したレビュー</Button>
+                    </Link>
+                </Box>
+                <Box m={4}>
+                    <Link href={route("shop.indexByUser", {userId: auth.user.id})}>
+                        <Button colorScheme={"green"}>投稿した店舗</Button>
+                    </Link>
+                </Box>
+            </Box>
     );
 }
+Dashboard.layout = (page) => <MainLayout children={page} title={"Dashboard"} />

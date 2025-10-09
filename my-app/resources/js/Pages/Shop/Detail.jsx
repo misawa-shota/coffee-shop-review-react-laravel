@@ -70,7 +70,13 @@ const Detail = (props) => {
                     </Button>
                 </Link>
             </HStack>
-            {props.shop.shop_images ? (
+            <Box>
+                {props.createdUser ? (<Text fontSize={{base: 12, md: 14}}>作成者: <Link color={"blue.400"} href={route("shop.indexByUser", {userId: props.createdUser.id})}>{props.createdUser.name}さん</Link></Text>) : (<Text fontSize={{base: 12, md: 14}}>作成者: 不明</Text>)}
+            </Box>
+            <Box>
+                {props.updatedUser ? (<Text fontSize={{base: 12, md: 14}}>更新者: <Link color={"blue.400"} href={route("shop.indexByUser", {userId: props.updatedUser.id})}>{props.updatedUser.name}さん</Link></Text>) : (<Text fontSize={{base: 12, md: 14}}>更新者: 不明</Text>)}
+            </Box>
+            {props.shop.shop_images.length > 0 ? (
                 <Box w={300}>
                     <Splide
                         options={options}
