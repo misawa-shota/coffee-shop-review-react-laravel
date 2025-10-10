@@ -35,6 +35,12 @@ class Shop extends Model
         return $this->hasMany(ShopImage::class);
     }
 
+    // 平均評価を小数点第一位まで取得
+    public function getReviewsAvgRatingAttribute()
+    {
+        return round($this->reviews()->avg('rating'), 1);
+    }
+
     public function saveShop($data)
     {
         $this->name = $data['name'];

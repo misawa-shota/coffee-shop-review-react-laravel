@@ -15,13 +15,26 @@ use Nette\Utils\Random;
 
 class ShopController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         // クエリパラメーターからステータスを取得
         $status = request('status');
 
-        // $shops = Shop::all();
-        $shops = Shop::with('reviews')->get();
+        // 店舗の全件を取得
+        $query = Shop::with('reviews', 'shopImages')
+            ->withCount('reviews')
+            ->withAvg('reviews', 'rating');
+
+        // 検索条件がある場合
+        if($request->has('search')){
+            $search = $request->search;
+            $query->where('name', 'like', '%' . $search . '%')
+                ->orWhere('location', 'like', '%' . $search . '%')
+                ->orWhere('description', 'like', '%' . $search . '%');
+        }
+
+        $shops = $query->paginate(10);
+
         // dd($shops);
         // 新着のレビューを5件取得
         $newReviews = Review::With('shop', 'user')

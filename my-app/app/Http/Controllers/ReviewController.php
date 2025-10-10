@@ -7,6 +7,7 @@ use Inertia\Inertia;
 use App\Models\Review;
 use App\Models\Shop;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 
 class ReviewController extends Controller
 {
@@ -62,6 +63,14 @@ class ReviewController extends Controller
     public function edit($id)
     {
         $review = Review::with('shop')->find($id);
+        $user = Auth::user();
+        if($user->id !== $review->user_id)
+        {
+            return redirect()->route('shop.index', [
+                'status' => 'error',
+            ]);
+        }
+
         return Inertia::render('Review/Edit',[
             'review' => $review,
         ]);
